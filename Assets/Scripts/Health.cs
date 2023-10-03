@@ -1,9 +1,9 @@
 using System.Collections;
 using UnityEngine;
 
-
 public class Health : MonoBehaviour
 {
+    private const string CommandChangeHealthCoroutine = "ChangeHealthCoroutine";
     public float health { get; private set; }
     private float MaxHealth = 1f;
     private float MinHealth = 0f;
@@ -25,7 +25,7 @@ public class Health : MonoBehaviour
 
     private void IncreaseHealth()
     {
-        if (!IsInvoking("ChangeHealthCoroutine"))
+        if (!IsInvoking(CommandChangeHealthCoroutine))
         {
             StartCoroutine(ChangeHealthCoroutine(health + HealthChange));
         }
@@ -33,7 +33,7 @@ public class Health : MonoBehaviour
 
     private void DecreaseHealth()
     {
-        if (!IsInvoking("ChangeHealthCoroutine"))
+        if (!IsInvoking(CommandChangeHealthCoroutine))
         {
             StartCoroutine(ChangeHealthCoroutine(health - HealthChange));
         }
@@ -44,8 +44,9 @@ public class Health : MonoBehaviour
         float currentHealth = health;
         float targetHealth = Mathf.Clamp(newHealth, MinHealth, MaxHealth);
         float HealthSpeed = 0.1f;
+        float healthComparisonThreshold = 0.001f;
 
-        while (Mathf.Abs(currentHealth - targetHealth) > 0.001f)
+        while (Mathf.Abs(currentHealth - targetHealth) > healthComparisonThreshold)
         {
             currentHealth = Mathf.MoveTowards(currentHealth, targetHealth, HealthSpeed * Time.deltaTime);
             health = currentHealth;
