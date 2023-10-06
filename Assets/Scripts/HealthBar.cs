@@ -8,15 +8,15 @@ public class HealthBar : MonoBehaviour
 
     private void Start()
     {
-        Health.Instance.OnHealthChanged += UpdateHealthBar;
+        Health.Instance.HealthChanged += OnUpdateHealthBar;
     }
 
     private void OnDesible()
     {
-        Health.Instance.OnHealthChanged -= UpdateHealthBar;
+        Health.Instance.HealthChanged -= OnUpdateHealthBar;
     }
 
-    private void UpdateHealthBar(float newHealth)
+    private void OnUpdateHealthBar(float newHealth)
     {
         StartCoroutine(ChangeHealthBar(newHealth));
     }

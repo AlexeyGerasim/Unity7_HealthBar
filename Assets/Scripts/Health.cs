@@ -9,7 +9,7 @@ public class Health : MonoBehaviour
     private float MinHealth = 0f;
     private float HealthChange = 0.1f;
 
-    public event System.Action<float> OnHealthChanged;
+    public event System.Action<float> HealthChanged;
 
     public static Health Instance { get; private set; }
 
@@ -50,7 +50,7 @@ public class Health : MonoBehaviour
         {
             currentHealth = Mathf.MoveTowards(currentHealth, targetHealth, HealthSpeed * Time.deltaTime);
             health = currentHealth;
-            OnHealthChanged?.Invoke(health);
+            HealthChanged?.Invoke(health);
             yield return null;
         }
 
