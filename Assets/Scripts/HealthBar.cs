@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
-    [SerializeField] private Image Bar;
+    [SerializeField] private Image _bar;
 
     private void Start()
     {
@@ -23,7 +23,7 @@ public class HealthBar : MonoBehaviour
 
     private IEnumerator ChangeHealthBar(float newHealth)
     {
-        float currentHealth = Bar.fillAmount;
+        float currentHealth = _bar.fillAmount;
         float targetHealth = newHealth;
         float healthSpeed = 0.1f;
         float healthComparisonThreshold = 0.001f;
@@ -31,7 +31,7 @@ public class HealthBar : MonoBehaviour
         while (Mathf.Abs(currentHealth - targetHealth) > healthComparisonThreshold)
         {
             currentHealth = Mathf.MoveTowards(currentHealth, targetHealth, healthSpeed * Time.deltaTime);
-            Bar.fillAmount = currentHealth;
+            _bar.fillAmount = currentHealth;
             yield return null;
         }
     }

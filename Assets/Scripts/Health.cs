@@ -4,12 +4,12 @@ using UnityEngine;
 public class Health : MonoBehaviour
 {
     private const string CommandChangeHealthCoroutine = "ChangeHealthCoroutine";
-    public float health { get; private set; }
-    private float MaxHealth = 1f;
-    private float MinHealth = 0f;
-    private float HealthChange = 0.1f;
+    private float _maxHealth = 1f;
+    private float _minHealth = 0f;
+    private float _healthChange = 0.1f;
 
     public event System.Action<float> HealthChanged;
+    public float health { get; private set; }
 
     public static Health Instance { get; private set; }
 
@@ -20,14 +20,14 @@ public class Health : MonoBehaviour
 
     private void Start()
     {
-        health = MaxHealth;
+        health = _maxHealth;
     }
 
     private void IncreaseHealth()
     {
         if (!IsInvoking(CommandChangeHealthCoroutine))
         {
-            StartCoroutine(ChangeHealthCoroutine(health + HealthChange));
+            StartCoroutine(ChangeHealthCoroutine(health + _healthChange));
         }
     }
 
@@ -35,14 +35,14 @@ public class Health : MonoBehaviour
     {
         if (!IsInvoking(CommandChangeHealthCoroutine))
         {
-            StartCoroutine(ChangeHealthCoroutine(health - HealthChange));
+            StartCoroutine(ChangeHealthCoroutine(health - _healthChange));
         }
     }
 
     private IEnumerator ChangeHealthCoroutine(float newHealth)
     {
         float currentHealth = health;
-        float targetHealth = Mathf.Clamp(newHealth, MinHealth, MaxHealth);
+        float targetHealth = Mathf.Clamp(newHealth, _minHealth, _maxHealth);
         float HealthSpeed = 0.1f;
         float healthComparisonThreshold = 0.001f;
 
