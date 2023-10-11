@@ -1,59 +1,54 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Health : MonoBehaviour
 {
-    private const string CommandChangeHealthCoroutine = "ChangeHealthCoroutine";
+    private Coroutine _coroutine;
+
     private float _maxHealth = 1f;
     private float _minHealth = 0f;
     private float _healthChange = 0.1f;
 
-    public event System.Action<float> HealthChanged;
-    public float health { get; private set; }
-
-    public static Health Instance { get; private set; }
-
-    private void Awake()
-    {
-        Instance = this;
-    }
+    public event UnityAction<float> HealthChanged;
+    private float playerHealth;
 
     private void Start()
     {
-        health = _maxHealth;
+        playerHealth = _maxHealth;
     }
 
     private void IncreaseHealth()
     {
-        if (!IsInvoking(CommandChangeHealthCoroutine))
+        if (_coroutine == null)
         {
-            StartCoroutine(ChangeHealthCoroutine(health + _healthChange));
+           _coroutine= StartCoroutine(ChangeHealth(playerHealth + _healthChange));
         }
     }
 
     private void DecreaseHealth()
     {
-        if (!IsInvoking(CommandChangeHealthCoroutine))
+        if (_coroutine == null)
         {
-            StartCoroutine(ChangeHealthCoroutine(health - _healthChange));
+            _coroutine = StartCoroutine(ChangeHealth(playerHealth - _healthChange));
         }
     }
 
-    private IEnumerator ChangeHealthCoroutine(float newHealth)
+    private IEnumerator ChangeHealth(float newHealth)
     {
-        float currentHealth = health;
+        float currentHealth = playerHealth;
         float targetHealth = Mathf.Clamp(newHealth, _minHealth, _maxHealth);
-        float HealthSpeed = 0.1f;
+        float healthSpeed = 1f;
         float healthComparisonThreshold = 0.001f;
 
         while (Mathf.Abs(currentHealth - targetHealth) > healthComparisonThreshold)
         {
-            currentHealth = Mathf.MoveTowards(currentHealth, targetHealth, HealthSpeed * Time.deltaTime);
-            health = currentHealth;
-            HealthChanged?.Invoke(health);
+            currentHealth = Mathf.MoveTowards(currentHealth, targetHealth, healthSpeed * Time.deltaTime);
+            playerHealth = currentHealth;
+            HealthChanged?.Invoke(playerHealth);
             yield return null;
         }
 
-        yield break;
+        _coroutine = null;
     }
 }

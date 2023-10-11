@@ -5,15 +5,22 @@ using UnityEngine.UI;
 public class HealthBar : MonoBehaviour
 {
     [SerializeField] private Image _bar;
+    [SerializeField] private Health _health;
+    [SerializeField] private float _healthSpeed;
 
     private void Start()
     {
-        Health.Instance.HealthChanged += OnUpdateHealthBar;
+        OnEnable();
+    }
+
+    private void OnEnable()
+    {
+        _health.HealthChanged += OnUpdateHealthBar;
     }
 
     private void OnDesible()
     {
-        Health.Instance.HealthChanged -= OnUpdateHealthBar;
+        _health.HealthChanged -= OnUpdateHealthBar;
     }
 
     private void OnUpdateHealthBar(float newHealth)
@@ -25,12 +32,11 @@ public class HealthBar : MonoBehaviour
     {
         float currentHealth = _bar.fillAmount;
         float targetHealth = newHealth;
-        float healthSpeed = 0.1f;
         float healthComparisonThreshold = 0.001f;
 
         while (Mathf.Abs(currentHealth - targetHealth) > healthComparisonThreshold)
         {
-            currentHealth = Mathf.MoveTowards(currentHealth, targetHealth, healthSpeed * Time.deltaTime);
+            currentHealth = Mathf.MoveTowards(currentHealth, targetHealth, _healthSpeed * Time.deltaTime);
             _bar.fillAmount = currentHealth;
             yield return null;
         }

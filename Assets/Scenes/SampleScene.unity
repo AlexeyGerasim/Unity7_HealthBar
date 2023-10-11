@@ -364,6 +364,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _bar: {fileID: 91926247}
+  _health: {fileID: 1996323480}
+  _healthSpeed: 0.3
 --- !u!4 &505342317
 Transform:
   m_ObjectHideFlags: 0
