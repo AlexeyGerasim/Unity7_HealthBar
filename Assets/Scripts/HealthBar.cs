@@ -8,17 +8,12 @@ public class HealthBar : MonoBehaviour
     [SerializeField] private Health _health;
     [SerializeField] private float _healthSpeed;
 
-    private void Start()
-    {
-        OnEnable();
-    }
-
     private void OnEnable()
     {
         _health.HealthChanged += OnUpdateHealthBar;
     }
 
-    private void OnDesible()
+    private void OnDisable()
     {
         _health.HealthChanged -= OnUpdateHealthBar;
     }
