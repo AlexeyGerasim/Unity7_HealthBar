@@ -8,6 +8,8 @@ public class HealthBar : MonoBehaviour
     [SerializeField] private Health _health;
     [SerializeField] private float _healthSpeed;
 
+    private Coroutine _smoothChangeHealthBar;
+
     private void OnEnable()
     {
         _health.HealthChanged += OnUpdateHealthBar;
@@ -20,7 +22,12 @@ public class HealthBar : MonoBehaviour
 
     private void OnUpdateHealthBar(float newHealth)
     {
-        StartCoroutine(ChangeHealthBar(newHealth));
+        if (_smoothChangeHealthBar != null)
+        {
+            StopCoroutine(_smoothChangeHealthBar);
+        }
+
+        _smoothChangeHealthBar = StartCoroutine(ChangeHealthBar(newHealth));
     }
 
     private IEnumerator ChangeHealthBar(float newHealth)
